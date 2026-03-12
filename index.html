@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UVA Women's Lacrosse Analytics — Game 9 vs Princeton</title>
+<style>
+  :root {
+    --uva-orange: #E57200;
+    --uva-blue: #232D4B;
+    --bg: #0d1117;
+    --card: #161b22;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8b949e;
+    --green: #3fb950;
+    --yellow: #d29922;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    line-height: 1.6;
+  }
+  header {
+    background: linear-gradient(135deg, var(--uva-blue) 0%, #1a2340 100%);
+    border-bottom: 3px solid var(--uva-orange);
+    padding: 48px 24px 36px;
+    text-align: center;
+  }
+  .badge {
+    display: inline-block;
+    background: var(--uva-orange);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+  }
+  header h1 {
+    font-size: clamp(24px, 5vw, 40px);
+    font-weight: 800;
+    color: white;
+    margin-bottom: 8px;
+  }
+  header h1 span { color: var(--uva-orange); }
+  header p {
+    color: #a0aec0;
+    font-size: 16px;
+    max-width: 560px;
+    margin: 0 auto 24px;
+  }
+  .score-box {
+    display: inline-flex;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+  .score-team {
+    padding: 12px 28px;
+    font-weight: 700;
+    font-size: 14px;
+    text-align: center;
+    min-width: 120px;
+  }
+  .score-team .num { font-size: 36px; display: block; line-height: 1.1; }
+  .score-team.uva { background: rgba(232,114,0,0.15); }
+  .score-team.uva .num { color: var(--uva-orange); }
+  .score-team.prin { background: rgba(255,140,0,0.07); }
+  .score-team.prin .num { color: #aaa; }
+  .divider { display: flex; align-items: center; padding: 0 12px; background: rgba(255,255,255,0.04); font-size: 12px; color: var(--muted); font-weight: 600; }
+  .prediction-pill {
+    display: inline-block;
+    margin-top: 10px;
+    background: rgba(63,185,80,0.12);
+    border: 1px solid rgba(63,185,80,0.3);
+    color: var(--green);
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .prediction-pill::before { content: "✓ "; }
+  main { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+  .section-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-bottom: 48px; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    transition: border-color 0.2s, transform 0.2s;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  .card:hover { border-color: var(--uva-orange); transform: translateY(-2px); }
+  .card-icon { font-size: 28px; margin-bottom: 12px; }
+  .card h3 { font-size: 16px; font-weight: 700; margin-bottom: 6px; color: white; }
+  .card p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .card .tag {
+    display: inline-block;
+    margin-top: 14px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    padding: 3px 10px;
+    border-radius: 6px;
+    background: rgba(232,114,0,0.15);
+    color: var(--uva-orange);
+  }
+  .story {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 48px;
+  }
+  .story h2 { font-size: 20px; color: white; margin-bottom: 14px; }
+  .story p { color: #c9d1d9; font-size: 14px; margin-bottom: 12px; }
+  .story p:last-child { margin-bottom: 0; }
+  .story strong { color: var(--uva-orange); }
+  .callout {
+    background: rgba(63,185,80,0.07);
+    border-left: 3px solid var(--green);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 16px 0;
+    font-size: 14px;
+    color: #c9d1d9;
+  }
+  .callout strong { color: var(--green); }
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 48px;
+  }
+  .stat-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+  }
+  .stat-box .val { font-size: 28px; font-weight: 800; color: var(--uva-orange); }
+  .stat-box .lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+  footer {
+    text-align: center;
+    padding: 32px 20px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--muted);
+  }
+  footer a { color: var(--uva-orange); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">Virginia Athletics · Women's Lacrosse Analytics</div>
+  <h1>Game 9 vs <span>#18 Princeton</span></h1>
+  <p>Opponent scouting, pre-game prediction, and post-game analysis — built from play-by-play data and public box scores.</p>
+  <div class="score-box">
+    <div class="score-team uva">
+      <span class="num">12</span>
+      VIRGINIA
+    </div>
+    <div class="divider">FINAL</div>
+    <div class="score-team prin">
+      <span class="num">10</span>
+      PRINCETON
+    </div>
+  </div>
+  <br>
+  <div class="prediction-pill">Predicted: Virginia 12, Princeton 10 — 48 hours before tip-off</div>
+</header>
+
+<main>
+
+  <div class="section-title">Game Intelligence Deliverables</div>
+  <div class="cards">
+    <a class="card" href="princeton-scouting-dashboard.html">
+      <div class="card-icon">🔍</div>
+      <h3>Opponent Scouting Dashboard</h3>
+      <p>Pre-game interactive report: win probability model, player profiles, shot maps, assist networks, draw analysis.</p>
+      <span class="tag">Sent March 10 · 48hr pre-game</span>
+    </a>
+    <a class="card" href="UVA_vs_Princeton_Dashboard.html">
+      <div class="card-icon">📊</div>
+      <h3>Post-Game Analysis Dashboard</h3>
+      <p>WPA across all 189 plays, momentum chart, player influence scores, performance grades, film room plan.</p>
+      <span class="tag">Sent March 12 · 18hr post-game</span>
+    </a>
+  </div>
+
+  <div class="section-title">Prediction Accuracy</div>
+  <div class="stats-row">
+    <div class="stat-box"><div class="val">12</div><div class="lbl">Predicted UVA Goals ✓</div></div>
+    <div class="stat-box"><div class="val">10</div><div class="lbl">Predicted PRI Goals ✓</div></div>
+    <div class="stat-box"><div class="val">19–3</div><div class="lbl">Draw Control (Predicted: 70%+)</div></div>
+    <div class="stat-box"><div class="val">D+</div><div class="lbl">Goalkeeping Grade (Finnelle regression flagged)</div></div>
+    <div class="stat-box"><div class="val">4–0</div><div class="lbl">Q3 Shutout (Ball movement key)</div></div>
+  </div>
+
+  <div class="story">
+    <h2>The Story Behind This</h2>
+    <p>Two months ago I didn't know what lacrosse was. At <strong>CMSAC</strong>, Dean Oliver mentioned that lacrosse should have its own dataset and more people should be doing serious analysis on it. When an opportunity came with Virginia Athletics Women's Lacrosse, I jumped.</p>
+    <p>The initial brief: <em>"Tell us something with the data. Momentum shifts. Impact of each play."</em> When I asked where the data lived, I was handed PDFs of season stats and pointed to the NCAA website.</p>
+    <p>I reached out to Zach Cippucci (founder of Lacrosse Reference) and started building. Two months later, we have a full scouting-to-analysis pipeline.</p>
+    <div class="callout">
+      <strong>March 10 message to coaches:</strong> "Virginia 12, Princeton 10. Close game decided by draws and first-half execution." — The prediction survived a game-ending 3-minute window where a goal was waved off, a shot hit the post at 1:17, and a free position attempt was saved.
+    </div>
+    <p>At halftime, down 3–6, the analysis identified the root problem: ISO lacrosse into Hughes' comfort zone. Recommendation: ball movement, wing attacks, off-ball cuts. Virginia outscored Princeton <strong>4–0 in Q3</strong> to retake the lead.</p>
+  </div>
+
+  <div class="section-title">What We're Building Next</div>
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon">🎥</div>
+      <h3>Computer Vision on Hudl</h3>
+      <p>Markerless pose estimation and player tracking on game footage — moving beyond box score data to spatial and biomechanical intelligence.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🖥️</div>
+      <h3>Coach-Facing Analytics App</h3>
+      <p>Full web application replacing email attachments — live WPA, substitution recommendations, opponent tendencies on demand.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">⚽</div>
+      <h3>Expected Goals Model</h3>
+      <p>Building the xG framework for women's lacrosse — a space where almost no published methodology currently exists.</p>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Built by <strong>Faizan Khan</strong> · Virginia Athletics Analytics · M.S. Data Science, UVA 2026<br><br>
+  Data: Official NCAA Box Score & Play-by-Play — Princeton at Virginia, 3/11/2026 · 
+  <a href="https://github.com/faizan-khan">GitHub</a>
+</footer>
+
+</body>
+</html>
