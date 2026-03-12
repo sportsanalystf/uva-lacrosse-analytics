@@ -12,7 +12,7 @@ I jumped at it. What I didn't know was what I was walking into.
 
 The initial brief: *"Tell us something with the data. Momentum shifts. Impact of each play. Anything useful."*
 
-When I asked where the data lived, I was handed PDFs of season stats and pointed to the NCAA website for play-by-play. No structured database. No tracking data. No established pipeline. I reached out to Zach Cippucci, founder of [Lacrosse Reference](https://www.lacrossereference.com/), to understand how others approach this space.
+When I asked where the data lived, I was handed PDFs of season stats and pointed to the NCAA website for play-by-play. No structured database. No tracking data. No established pipeline. I reached out to Zach Capozzi, founder of [Lacrosse Reference](https://www.lacrossereference.com/), to understand how others approach this space.
 
 Two months later, this is what we built.
 
